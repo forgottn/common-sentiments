@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="start|center_vertical"
+        android:id="@+id/leftSide"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/rightSide"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:text="Tech Talk"
+            android:gravity="start|center_vertical"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/desc"
+            android:text="some random tech talk that I really don't want to go to but I did it anyways"
+            android:gravity="center_vertical|start"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:id="@+id/rightSide"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_alignParentEnd="true"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="end|center_vertical"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/time"
+            android:text="2:00 - 4:30 AM"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/distance"
+            android:text="0 km"
+            android:gravity="end|center_vertical"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/attending"
+            android:text="0"
+            android:gravity="end|center_vertical"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+    </LinearLayout>
+
+</RelativeLayout>
