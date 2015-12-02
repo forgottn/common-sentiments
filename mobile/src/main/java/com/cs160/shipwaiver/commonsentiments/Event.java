@@ -6,8 +6,10 @@ import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,12 +19,9 @@ import java.util.List;
  * Created by forgottn on 11/19/15.
  */
 public class Event {
-    public void add(Context context) {
+    public static void add(Context context, SaveCallback eventSaveCallback) {
         String[] sentimentTitles = {"Confused", "Too Fast", "Too Slow", "Excited", "Thumbs Up", "Thumbs Down", "Sleepy", "Sad", "Angry"};
 
-        Parse.enableLocalDatastore(context);
-
-        Parse.initialize(context, "065cF714ZPQ4iqQu0y6f8YhPtUIFcdGztqRGDPW4", "KVVK6d2LPoE3XB9xmqwubyUOe2jddgAI138WE58F");
         ArrayList<ParseObject> sentiments = new ArrayList<ParseObject>();
         for (String sentimentTitle : sentimentTitles) {
             ParseObject sentiment = new ParseObject("Sentiment");
@@ -34,6 +33,8 @@ public class Event {
         ParseObject event = new ParseObject("Event");
         event.put("name", "Tech Talk");
         event.put("date", new Date());
+        event.put("startDate", new Date());
+        event.put("endDate", new Date());
         event.put("description", "some random tech talk");
         LatLng latlng = getLocationFromAddress(context, "2404 Fulton St. Berkeley, CA 94704");
         ParseGeoPoint point = new ParseGeoPoint(latlng.latitude, latlng.longitude);
@@ -41,10 +42,10 @@ public class Event {
         event.put("numberAttending", 0);
         event.put("questions", new ArrayList<ParseObject>());
         event.put("sentiments", sentiments);
-        event.saveInBackground();
+        event.saveInBackground(eventSaveCallback);
     }
 
-    public LatLng getLocationFromAddress(Context context, String strAddress) {
+    public static LatLng getLocationFromAddress(Context context, String strAddress) {
 
         Geocoder coder = new Geocoder(context);
         List<Address> address;
