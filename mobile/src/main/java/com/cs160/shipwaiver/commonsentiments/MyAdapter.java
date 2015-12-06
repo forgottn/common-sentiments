@@ -70,12 +70,12 @@ public class MyAdapter extends BaseAdapter {
 
         ParseObject event = eventList.get(position);
         text1.setText(event.getString("name"));
-        text2.setText(String.format("%d", event.getInt("numberAttending")));
+        text2.setText(String.format("%d Attendees", event.getInt("numberAttending")));
         text3.setText(event.getString("description"));
 
         ParseGeoPoint point = (ParseGeoPoint) event.get("location");
-        int distance = getDistanceBetweenLatitudeAndLongitude(point.getLongitude(), point.getLatitude(), myLocation.getLatitude(), myLocation.getLongitude());
-        text4.setText(String.format("%d km", distance));
+        Double distance = getDistanceBetweenLatitudeAndLongitude(point.getLongitude(), point.getLatitude(), myLocation.getLatitude(), myLocation.getLongitude());
+        text4.setText(String.format("%.1f Miles", distance));
 
         Date startDate = event.getDate("startDate");
         Date endDate = event.getDate("endDate");
@@ -92,7 +92,7 @@ public class MyAdapter extends BaseAdapter {
         return formatter.format(date);
     }
 
-    private int getDistanceBetweenLatitudeAndLongitude( Double eLongitude, Double eLatitude, Double locLatitude, Double locLongitude) {
+    private Double getDistanceBetweenLatitudeAndLongitude( Double eLongitude, Double eLatitude, Double locLatitude, Double locLongitude) {
         Double earthRadius = 6371000.00;
         Double dLatitude = Math.toRadians(eLatitude - locLatitude);
         Double dLongitude = Math.toRadians(eLongitude - locLongitude);
@@ -101,7 +101,7 @@ public class MyAdapter extends BaseAdapter {
                         Math.sin(dLongitude / 2) * Math.sin(dLongitude / 2);
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         Double distInKm = (earthRadius * c) / 1000.00;
-        return (int) Math.round(distInKm);
+        return distInKm * 0.621371;
     }
 
 }
