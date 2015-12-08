@@ -137,7 +137,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
         TextView emoTitle = (TextView) layout.findViewById(R.id.emo_title);
 
-        TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes)
+        TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes);
     }
 
 }
