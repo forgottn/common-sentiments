@@ -3,9 +3,7 @@ package com.cs160.shipwaiver.commonsentiments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,22 +14,21 @@ import android.widget.ViewSwitcher;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionsActivity extends AppCompatActivity {
+public class QuestionsSentimentsActivity extends AppCompatActivity {
 
     QuestionAdapter adapter;
     private ArrayList<ParseObject> mQuestionList = new ArrayList<>();
 
     public ListView mQuestionListView;
     public String mParseObjectID;
+
+    private ViewSwitcher mViewSwitcher;
 
     private ImageView mExitEventButton;
     private ImageView mSwitchViewButton;
@@ -40,7 +37,7 @@ public class QuestionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions);
+        setContentView(R.layout.activity_questions_sentiments);
 
         Bundle bun = getIntent().getExtras();
         mParseObjectID = bun.getString("objectID");
@@ -54,7 +51,23 @@ public class QuestionsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        mQuestionListView = (ListView) findViewById(R.id.eventList);
+
+        mViewSwitcher = (ViewSwitcher) findViewById(R.id.switch_type);
+        final View firstView = mViewSwitcher.findViewById(R.id.question_list);
+        View secondView = mViewSwitcher.findViewById(R.id.sentiment_list);
+
+        mSwitchViewButton = (ImageView) findViewById(R.id.menu_switch);
+        mSwitchViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewSwitcher.getCurrentView() != firstView) {
+                    mViewSwitcher.showPrevious();
+                } else {
+                    mViewSwitcher.showNext();
+                }
+            }
+        });
+        mQuestionListView = (ListView) findViewById(R.id.question_list);
         mQuestionListView.setAdapter(adapter);
 
         mQuestionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

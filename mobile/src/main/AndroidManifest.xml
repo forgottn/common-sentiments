@@ -34,12 +34,8 @@
             android:label="@string/title_activity_add_event"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".QuestionsActivity"
+            android:name=".QuestionsSentimentsActivity"
             android:label="@string/title_activity_questions"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".SentimentsActivity"
-            android:label="@string/title_activity_sentiments"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddQuestionActivity"

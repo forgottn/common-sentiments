@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         Log.d("objectID", entry.getObjectId());
-                        Intent i = new Intent(getBaseContext(), QuestionsActivity.class);
+                        Intent i = new Intent(getBaseContext(), QuestionsSentimentsActivity.class);
                         i.putExtra("objectID", entry.getObjectId());
                         viewSwitcher.showPrevious();
                         mActiveViewSwitcher = null;
