@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:id="@+id/question_list"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:listSelector="#fff"
-    android:dividerHeight="1dp"
-    android:divider="#D9D8D6"
-    android:background="#fff" />
+    android:layout_height="match_parent" >
+
+    <ListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+
+        android:id="@+id/question_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="#fff"
+        android:dividerHeight="1dp"
+        android:divider="#D9D8D6"
+        android:background="#fff" />
+
+    <include layout="@layout/floating_action_button_layout" />
+</android.support.design.widget.CoordinatorLayout>
+
