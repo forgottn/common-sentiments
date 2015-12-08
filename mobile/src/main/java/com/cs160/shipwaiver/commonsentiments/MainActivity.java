@@ -6,17 +6,14 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.ViewSwitcher;
 
 import com.google.android.gms.location.LocationListener;
@@ -29,7 +26,6 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +77,8 @@ public class MainActivity extends AppCompatActivity implements
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ParseObject entry = (ParseObject) parent.getItemAtPosition(position);
+                final ParseObject entry = (ParseObject) parent.getItemAtPosition(position);
+                Log.d("objectID", entry.getObjectId());
                 final ViewSwitcher viewSwitcher = (ViewSwitcher) view;
                 if (mActiveViewSwitcher != null && mActiveViewSwitcher != viewSwitcher) {
                     mActiveViewSwitcher.showPrevious();
@@ -91,12 +88,25 @@ public class MainActivity extends AppCompatActivity implements
                 View info_row = view.findViewById(R.id.row_layout);
                 View button_row = view.findViewById(R.id.join_or_back);
                 viewSwitcher.showNext();
-                Button back_button = (Button) button_row.findViewById(R.id.back_button);
-                back_button.setOnClickListener(new View.OnClickListener() {
+                Button backButton = (Button) button_row.findViewById(R.id.back_button);
+                backButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewSwitcher.showPrevious();
                         mActiveViewSwitcher = null;
+                    }
+                });
+
+                Button joinButton = (Button) button_row.findViewById(R.id.join_button);
+                joinButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("objectID", entry.getObjectId());
+                        Intent i = new Intent(getBaseContext(), QuestionsActivity.class);
+                        i.putExtra("objectID", entry.getObjectId());
+                        viewSwitcher.showPrevious();
+                        mActiveViewSwitcher = null;
+                        startActivity(i);
                     }
                 });
 

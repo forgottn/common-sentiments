@@ -5,19 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.cs160.shipwaiver.commonsentiments.MainActivity">
+    tools:context="com.cs160.shipwaiver.commonsentiments.QuestionsActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/logo"/>
-
-    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/event_appbar_layout" />
 
     <ListView
         android:id="@+id/eventList"

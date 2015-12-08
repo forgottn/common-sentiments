@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="start|center_vertical"
+        android:id="@+id/leftSide"
+        android:layout_alignParentStart="true"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"
+            android:gravity="start|center_vertical"
+            android:src="@drawable/arrow"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/upvote_count"
+            android:textColor="#848383"
+            android:text="32"
+            android:textSize="32sp"
+            android:textAlignment="center"
+            android:gravity="center_vertical|start|center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:id="@+id/middleSide"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/leftSide"
+        android:layout_toStartOf="@+id/rightSide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="start|center_vertical"
+        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+        android:paddingStart="?android:attr/listPreferredItemPaddingStart" >
+        <TextView
+            android:id="@+id/question_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:textColor="@android:color/black"
+            android:text="What is kerning?"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rightSide"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="end|center_vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/flag"
+            android:layout_gravity="end|bottom"/>
+    </LinearLayout>
+
+</RelativeLayout>
