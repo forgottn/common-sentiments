@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:id="@+id/emo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/emo_angry"/>
+        <TextView
+            android:id="@+id/emo_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="30sp"
+            android:text="Confused"/>
+        <TextView
+            android:id="@+id/emo_votes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="14 Votes"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#3283B2"
+                android:textColor="#fff"
+                android:layout_marginEnd="10dp"
+                android:text="Vote"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#fff"
+                android:background="#CCCCCB"
+                android:layout_marginStart="10dp"
+                android:text="Back"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
