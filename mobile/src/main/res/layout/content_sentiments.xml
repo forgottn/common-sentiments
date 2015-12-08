@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/sentiment_list"
     android:layout_gravity="center_horizontal|center_vertical"
-    app:innerRadius="100dp"
+    innerRadius="100dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
