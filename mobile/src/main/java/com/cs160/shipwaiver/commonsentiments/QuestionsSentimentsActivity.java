@@ -75,9 +75,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         mSwitchViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("SwitchMenu", "Trigger");
                 if (mViewSwitcher.getCurrentView() != questionView) {
-                    Log.d("SwitchMenu", "Trigger first if");
                     mViewSwitcher.showPrevious();
                     fab.setVisibility(View.VISIBLE);
                 } else {
@@ -135,8 +133,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
     public void onSentimentClicked(View view) {
         ImageView emoClicked = (ImageView) view;
-        String idAsString = view.getResources().getResourceName(view.getId()).split("/")[1];
-        Log.d("StringID", idAsString);
+        final String idAsString = view.getResources().getResourceName(view.getId()).split("/")[1];
         LayoutInflater inflater = LayoutInflater.from(this);
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.content_sentiment_clicked, null, false);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);
@@ -163,10 +160,18 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         });
 
         Button voteButton = (Button) layout.findViewById(R.id.emo_vote_button);
+        voteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSentiments.get(idAsString).increment("upvoteCount");
+                mSentiments.get(idAsString).saveInBackground();
+                TextView emoVotes = (TextView) findViewById(R.id.emo_votes);
+                emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
+            }
+        });
 
         container.findViewById(R.id.sentiment_list).setVisibility(View.GONE);
         container.addView(layout);
 
     }
-
 }
