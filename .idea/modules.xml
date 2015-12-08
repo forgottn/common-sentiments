@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/CommonSentiments.iml" filepath="$PROJECT_DIR$/CommonSentiments.iml" />
       <module fileurl="file://$PROJECT_DIR$/circleLayout/circleLayout.iml" filepath="$PROJECT_DIR$/circleLayout/circleLayout.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common-sentiments.iml" filepath="$PROJECT_DIR$/common-sentiments.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobile/mobile.iml" filepath="$PROJECT_DIR$/mobile/mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/wear/wear.iml" filepath="$PROJECT_DIR$/wear/wear.iml" />
     </modules>

@@ -29,7 +29,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
     QuestionAdapter adapter;
     private ArrayList<ParseObject> mQuestionList = new ArrayList<>();
-    private HashMap<String, Integer> mSentiments = new HashMap<>();
+    private HashMap<String, ParseObject> mSentiments = new HashMap<>();
 
     public ListView mQuestionListView;
     public String mParseObjectID;
@@ -48,6 +48,19 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         Bundle bun = getIntent().getExtras();
         mParseObjectID = bun.getString("objectID");
 
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
+                i.putExtra("objectID", mParseObjectID);
+                startActivity(i);
+            }
+        });
+        fab.setVisibility(View.GONE);
+
+
+
         adapter = new QuestionAdapter(getApplicationContext(), mQuestionList);
 
         mExitEventButton = (ImageView) findViewById(R.id.menu_close);
@@ -59,17 +72,19 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         });
 
         mViewSwitcher = (ViewSwitcher) findViewById(R.id.switch_type);
-        final View firstView = mViewSwitcher.findViewById(R.id.question_list);
-        View secondView = mViewSwitcher.findViewById(R.id.sentiment_list);
+        final View questionView = mViewSwitcher.findViewById(R.id.question_list);
 
         mSwitchViewButton = (ImageView) findViewById(R.id.menu_switch);
         mSwitchViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mViewSwitcher.getCurrentView() != firstView) {
+                if (mViewSwitcher.getCurrentView() != questionView) {
                     mViewSwitcher.showPrevious();
+                    fab.setVisibility(View.VISIBLE);
                 } else {
                     mViewSwitcher.showNext();
+                    fab.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -83,15 +98,14 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
-                startActivity(i);
-            }
-        });
 
+
+        getQuestionListAndSentiments();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getQuestionListAndSentiments();
     }
 
@@ -113,11 +127,11 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
 
-//                    List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
-//                    for (int i = 0; i < sentimentObjects.size(); i++) {
-//                        ParseObject sentiment = sentimentObjects.get(i);
-//                        mSentiments.put(sentiment.getString("name"), sentiment.getInt("upvoteCount"));
-//                    }
+                    List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
+                    for (int i = 0; i < sentimentObjects.size(); i++) {
+                        ParseObject sentiment = sentimentObjects.get(i);
+                        mSentiments.put(sentiment.getString("viewId"), sentiment);
+                    }
                 } else {
                     e.printStackTrace();
                 }
@@ -128,16 +142,45 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
     public void onSentimentClicked(View view) {
         ImageView emoClicked = (ImageView) view;
-//        int emoID = emoClicked.getId();
+        final String idAsString = view.getResources().getResourceName(view.getId()).split("/")[1];
         LayoutInflater inflater = LayoutInflater.from(this);
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.content_sentiment_clicked, null, false);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);
         ImageView emo = (ImageView) layout.findViewById(R.id.emo);
         emo.setImageDrawable(emoClicked.getDrawable());
 
+
         TextView emoTitle = (TextView) layout.findViewById(R.id.emo_title);
+        emoTitle.setText(mSentiments.get(idAsString).getString("name"));
 
         TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes);
-    }
+        emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
 
+        Button backButton = (Button) layout.findViewById(R.id.emo_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);
+                RelativeLayout sentimentView = (RelativeLayout) container.findViewById(R.id.clicked_sentiment_view);
+
+                container.removeView(sentimentView);
+                container.findViewById(R.id.sentiment_list).setVisibility(View.VISIBLE);
+            }
+        });
+
+        Button voteButton = (Button) layout.findViewById(R.id.emo_vote_button);
+        voteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSentiments.get(idAsString).increment("upvoteCount");
+                mSentiments.get(idAsString).saveInBackground();
+                TextView emoVotes = (TextView) findViewById(R.id.emo_votes);
+                emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
+            }
+        });
+
+        container.findViewById(R.id.sentiment_list).setVisibility(View.GONE);
+        container.addView(layout);
+
+    }
 }

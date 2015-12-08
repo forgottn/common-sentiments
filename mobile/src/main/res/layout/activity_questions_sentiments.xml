@@ -11,11 +11,9 @@
 
     <ViewSwitcher
         android:id="@+id/switch_type"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-        <include layout="@layout/content_questions" />
-
+        android:layout_height="match_parent">
         <RelativeLayout
             android:id="@+id/sentiments_container"
             android:layout_width="match_parent"
@@ -23,7 +21,12 @@
             <include layout="@layout/content_sentiments" />
         </RelativeLayout>
 
+        <include layout="@layout/content_questions" />
+
+
+
     </ViewSwitcher>
 
+    <include layout="@layout/floating_action_button_layout" />
 
 </android.support.design.widget.CoordinatorLayout>

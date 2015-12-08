@@ -1,14 +1,18 @@
 package com.cs160.shipwaiver.commonsentiments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -54,11 +58,33 @@ public class QuestionAdapter extends BaseAdapter {
                 inflate(R.layout.question_row_layout, parent, false);
 
         TextView text1 = (TextView) rowView.findViewById(R.id.question_text);
-        TextView text2 = (TextView) rowView.findViewById(R.id.upvote_count);
+        final TextView text2 = (TextView) rowView.findViewById(R.id.upvote_count);
 
-        ParseObject event = questionList.get(position);
-        text1.setText(event.getString("question"));
-        text2.setText(String.format("%d", event.getInt("upvoteCount")));
+        final ParseObject question = questionList.get(position);
+        text1.setText(question.getString("question"));
+        text2.setText(String.format("%d", question.getInt("upvoteCount")));
+
+        ImageView upvoteArrow = (ImageView) rowView.findViewById(R.id.arrow);
+        upvoteArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                text2.setTextColor(Color.parseColor("#5CBFEA"));
+                question.increment("upvoteCount");
+                question.saveInBackground();
+                text2.setText(String.format("%d", question.getInt("upvoteCount")));
+
+            }
+        });
+
+        final ImageView flag = (ImageView) rowView.findViewById(R.id.flag);
+        flag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flag.setImageDrawable(context.getDrawable(R.drawable.flag_clicked));
+                question.increment("flagCount");
+                question.saveInBackground();
+            }
+        });
 
         return rowView;
     }
