@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class QuestionsSentimentsActivity extends AppCompatActivity {
+public class ActivityQuestionSentimentList extends AppCompatActivity {
 
     QuestionAdapter adapter;
     private ArrayList<ParseObject> mQuestionList = new ArrayList<>();
@@ -43,7 +41,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questions_sentiments);
+        setContentView(R.layout.activity_question_sentiment_list);
 
         Bundle bun = getIntent().getExtras();
         mParseObjectID = bun.getString("objectID");
@@ -52,7 +50,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
+                Intent i = new Intent(getBaseContext(), ActivityQuestionAdd.class);
                 i.putExtra("objectID", mParseObjectID);
                 startActivity(i);
             }
@@ -127,9 +125,11 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
 
+                    android.util.Log.e("oh", "STARTING PUTTT");
                     List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
                     for (int i = 0; i < sentimentObjects.size(); i++) {
                         ParseObject sentiment = sentimentObjects.get(i);
+                        android.util.Log.e("oh", "PUTTING IN " + sentiment.getString("viewId"));
                         mSentiments.put(sentiment.getString("viewId"), sentiment);
                     }
                 } else {
@@ -143,6 +143,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
     public void onSentimentClicked(View view) {
         ImageView emoClicked = (ImageView) view;
         final String idAsString = view.getResources().getResourceName(view.getId()).split("/")[1];
+        android.util.Log.e("lol", "WHOAAAAAAAAAA " + idAsString);
         LayoutInflater inflater = LayoutInflater.from(this);
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.content_sentiment_clicked, null, false);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);

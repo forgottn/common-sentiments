@@ -9,15 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-import com.parse.SaveCallback;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by forgottn on 12/7/15.
@@ -55,7 +49,7 @@ public class QuestionAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = LayoutInflater.from(context).
-                inflate(R.layout.question_row_layout, parent, false);
+                inflate(R.layout.component_question_row, parent, false);
 
         TextView text1 = (TextView) rowView.findViewById(R.id.question_text);
         final TextView text2 = (TextView) rowView.findViewById(R.id.upvote_count);

@@ -7,7 +7,7 @@
     android:layout_width="fill_parent"
     android:fillViewport="true"
     android:background="#fff"
-    tools:context="com.cs160.shipwaiver.commonsentiments.AddEventActivity" >
+    tools:context=".ActivityEventAdd" >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

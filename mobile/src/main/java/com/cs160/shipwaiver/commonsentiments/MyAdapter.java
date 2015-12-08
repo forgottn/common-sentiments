@@ -1,7 +1,6 @@
 package com.cs160.shipwaiver.commonsentiments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,9 @@ import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by forgottn on 10/15/15.
@@ -60,7 +57,7 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = LayoutInflater.from(context).
-                inflate(R.layout.row_layout, parent, false);
+                inflate(R.layout.component_event_row, parent, false);
 
         TextView text1 = (TextView) rowView.findViewById(R.id.name);
         TextView text2 = (TextView) rowView.findViewById(R.id.attending);

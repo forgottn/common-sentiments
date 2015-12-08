@@ -4,29 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".QuestionsSentimentsActivity">
+    android:fitsSystemWindows="false"
+    tools:context=".ActivityQuestionSentimentList">
 
-    <include layout="@layout/event_appbar_layout" />
+    <include layout="@layout/component_event_appbar" />
 
     <ViewSwitcher
         android:id="@+id/switch_type"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
         <RelativeLayout
             android:id="@+id/sentiments_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <include layout="@layout/content_sentiments" />
+            <include layout="@layout/content_sentiment_list" />
         </RelativeLayout>
 
-        <include layout="@layout/content_questions" />
-
-
+        <include layout="@layout/content_question_list" />
 
     </ViewSwitcher>
 
-    <include layout="@layout/floating_action_button_layout" />
+    <include layout="@layout/component_fab" />
 
 </android.support.design.widget.CoordinatorLayout>

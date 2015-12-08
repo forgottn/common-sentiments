@@ -1,16 +1,13 @@
 package com.cs160.shipwaiver.commonsentiments;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-public class AddEventActivity extends AppCompatActivity {
+public class ActivityEventAdd extends AppCompatActivity {
 
     EditText name;
     EditText description;
@@ -21,7 +18,7 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_event_add);
     }
 
     public void onButtonClicked(View view) {

@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:name=".ActivityEventList"
+            android:label="@string/app_name_for_launcher"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,15 +30,15 @@
             android:value="AIzaSyCdAHV6mqslqoFb6HnJS_2Zp0CoONo6cH0" />
 
         <activity
-            android:name=".AddEventActivity"
+            android:name=".ActivityEventAdd"
             android:label="@string/title_activity_add_event"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".QuestionsSentimentsActivity"
+            android:name=".ActivityQuestionSentimentList"
             android:label="@string/title_activity_questions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddQuestionActivity"
+            android:name=".ActivityQuestionAdd"
             android:label="@string/title_activity_add_question"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

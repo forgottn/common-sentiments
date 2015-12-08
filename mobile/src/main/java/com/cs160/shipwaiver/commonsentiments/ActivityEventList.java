@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements
+public class ActivityEventList extends AppCompatActivity implements
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener,
     LocationListener {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_event_list);
 
         myLocation = new MyLocation();
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         Log.d("objectID", entry.getObjectId());
-                        Intent i = new Intent(getBaseContext(), QuestionsSentimentsActivity.class);
+                        Intent i = new Intent(getBaseContext(), ActivityQuestionSentimentList.class);
                         i.putExtra("objectID", entry.getObjectId());
                         viewSwitcher.showPrevious();
                         mActiveViewSwitcher = null;
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), AddEventActivity.class);
+                Intent i = new Intent(getBaseContext(), ActivityEventAdd.class);
                 startActivity(i);
             }
         });
@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d("Longitude", String.format("%.2f", myLocation.getLongitude()));
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
         query.whereWithinMiles("location", userLocation, 5.0);
+        query.addAscendingOrder("startDate");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
