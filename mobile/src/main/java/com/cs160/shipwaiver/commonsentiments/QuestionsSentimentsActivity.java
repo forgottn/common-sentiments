@@ -45,18 +45,21 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_sentiments);
 
+        Bundle bun = getIntent().getExtras();
+        mParseObjectID = bun.getString("objectID");
+
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
+                i.putExtra("objectID", mParseObjectID);
                 startActivity(i);
             }
         });
         fab.setVisibility(View.GONE);
 
-        Bundle bun = getIntent().getExtras();
-        mParseObjectID = bun.getString("objectID");
+
 
         adapter = new QuestionAdapter(getApplicationContext(), mQuestionList);
 
@@ -97,6 +100,12 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
 
 
+        getQuestionListAndSentiments();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getQuestionListAndSentiments();
     }
 
