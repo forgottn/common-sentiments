@@ -11,9 +11,9 @@
 
     <ViewSwitcher
         android:id="@+id/switch_type"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        android:layout_height="match_parent">
         <include layout="@layout/content_questions" />
 
         <RelativeLayout
@@ -25,5 +25,6 @@
 
     </ViewSwitcher>
 
+    <include layout="@layout/floating_action_button_layout" />
 
 </android.support.design.widget.CoordinatorLayout>

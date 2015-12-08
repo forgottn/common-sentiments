@@ -45,6 +45,15 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions_sentiments);
 
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
+                startActivity(i);
+            }
+        });
+
         Bundle bun = getIntent().getExtras();
         mParseObjectID = bun.getString("objectID");
 
@@ -68,8 +77,10 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mViewSwitcher.getCurrentView() != firstView) {
                     mViewSwitcher.showPrevious();
+                    fab.setVisibility(View.VISIBLE);
                 } else {
                     mViewSwitcher.showNext();
+                    fab.setVisibility(View.GONE);
                 }
             }
         });
@@ -83,14 +94,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), AddQuestionActivity.class);
-                startActivity(i);
-            }
-        });
+
 
         getQuestionListAndSentiments();
     }
@@ -137,7 +141,7 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
         TextView emoTitle = (TextView) layout.findViewById(R.id.emo_title);
 
-        TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes)
+        TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes);
     }
 
 }
