@@ -21,11 +21,13 @@ import java.util.List;
 public class Event {
     public static void add(Context context, SaveCallback eventSaveCallback) {
         String[] sentimentTitles = {"Confused", "Too Fast", "Too Slow", "Excited", "Thumbs Up", "Thumbs Down", "Sleepy", "Sad", "Angry"};
+        String[] sentimentViewIds = {"emo_confused", "emo_toofast", "emo_slow", "emo_excited", "emo_thumbsu", "emo_thumbsd", "emo_sleepy", "emo_sad", "emo_angry"};
 
         ArrayList<ParseObject> sentiments = new ArrayList<ParseObject>();
-        for (String sentimentTitle : sentimentTitles) {
+        for (int i = 0; i < sentimentTitles.length; i++) {
             ParseObject sentiment = new ParseObject("Sentiment");
-            sentiment.put("name", sentimentTitle);
+            sentiment.put("name", sentimentTitles[i]);
+            sentiment.put("viewId", sentimentViewIds[i]);
             sentiment.put("upvoteCount", 0);
             sentiments.add(sentiment);
         }

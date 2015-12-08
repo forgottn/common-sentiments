@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clicked_sentiment_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -38,6 +39,7 @@
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
             <Button
+                android:id="@+id/emo_vote_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#3283B2"
@@ -46,6 +48,7 @@
                 android:text="Vote"/>
 
             <Button
+                android:id="@+id/emo_back_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="#fff"
