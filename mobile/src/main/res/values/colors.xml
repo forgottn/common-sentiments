@@ -3,4 +3,6 @@
     <color name="colorPrimary">#F9FBFB</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#A8CEDF</color>
+    <color name="addEventText">#1b82b2</color>
+    <color name="postButtonColor">#0081b5</color>
 </resources>

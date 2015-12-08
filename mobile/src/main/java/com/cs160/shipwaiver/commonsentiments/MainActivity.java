@@ -1,17 +1,23 @@
 package com.cs160.shipwaiver.commonsentiments;
 
+import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ViewSwitcher;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.common.ConnectionResult;
@@ -19,7 +25,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements
     private ArrayList<ParseObject> mEventList = new ArrayList<>();
 
     public ListView mListView;
+    private ViewSwitcher mActiveViewSwitcher;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -53,16 +59,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         myLocation = new MyLocation();
 
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1000); // 1 second, in milliseconds
+                .setFastestInterval(10000); // 1 second, in milliseconds
 
         mGoogleApiClient = new GoogleApiClient.Builder( this )
             .addApi(LocationServices.API)
@@ -75,17 +78,37 @@ public class MainActivity extends AppCompatActivity implements
         mListView = (ListView) findViewById(R.id.eventList);
         mListView.setAdapter(adapter);
 
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ParseObject entry = (ParseObject) parent.getItemAtPosition(position);
+                final ViewSwitcher viewSwitcher = (ViewSwitcher) view;
+                if (mActiveViewSwitcher != null && mActiveViewSwitcher != viewSwitcher) {
+                    mActiveViewSwitcher.showPrevious();
+                }
+
+                mActiveViewSwitcher = viewSwitcher;
+                View info_row = view.findViewById(R.id.row_layout);
+                View button_row = view.findViewById(R.id.join_or_back);
+                viewSwitcher.showNext();
+                Button back_button = (Button) button_row.findViewById(R.id.back_button);
+                back_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewSwitcher.showPrevious();
+                        mActiveViewSwitcher = null;
+                    }
+                });
+
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SaveCallback newEventSaveCallBack = new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        getEventList();
-                    }
-                };
-                Event.add(getApplicationContext(), newEventSaveCallBack);
+                Intent i = new Intent(getBaseContext(), AddEventActivity.class);
+                startActivity(i);
             }
         });
 
@@ -122,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
     }
-
 
     @Override
     public void onConnected(Bundle bundle) {

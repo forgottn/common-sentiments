@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:fillViewport="true"
+    android:background="#fff"
+    tools:context="com.cs160.shipwaiver.commonsentiments.AddEventActivity" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3" >
+
+            <Button
+                android:id="@+id/post_button"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/postButtonColor"
+                android:onClick="onButtonClicked"
+                android:textColor="#FFF"
+                android:text="Post"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="#AAAAAB"
+                android:onClick="onButtonClicked"
+                android:textColor="#FFF"
+                android:text="Cancel"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/event_name"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/addEventText"
+            android:text="Event's Name"/>
+
+        <EditText
+            android:id="@+id/event_name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/description"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/addEventText"
+            android:text="Description"/>
+
+        <EditText
+            android:id="@+id/description_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="5"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"/>
+
+        <TextView
+            android:id="@+id/venue"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/addEventText"
+            android:text="Venue"/>
+
+        <EditText
+            android:id="@+id/venue_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/time"
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/addEventText"
+            android:text="Time"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="7">
+
+            <EditText
+                android:id="@+id/start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_weight="1"
+                android:textColor="#000"
+                android:text="---"/>
+
+            <EditText
+                android:id="@+id/end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="3"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/status"
+            android:paddingTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/addEventText"
+            android:text="Status"/>
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <RadioButton android:id="@+id/audience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Audience"
+                android:textSize="20sp"
+                android:textColor="#777777"
+                android:onClick="onRadioButtonClicked"
+                android:layout_weight="1"/>
+            <RadioButton android:id="@+id/presenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="Presenter"
+                android:textColor="#777777"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:checked="false" />
+        </RadioGroup>
+
+    </LinearLayout>
+</ScrollView>

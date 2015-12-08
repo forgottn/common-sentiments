@@ -1,144 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingTop="8dp">
-    <LinearLayout
-        android:paddingTop="3dp"
-        android:paddingBottom="2dp"
-        android:orientation="vertical"
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:inAnimation="@android:anim/fade_in">
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:gravity="start|center_vertical"
-        android:id="@+id/leftSide"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/rightSide"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
-        <TextView
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:id="@+id/row_layout">
+        <LinearLayout
+            android:paddingTop="3dp"
+            android:paddingBottom="2dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:text="Tech Talk"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:layout_gravity="start"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
             android:gravity="start|center_vertical"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+            android:id="@+id/leftSide"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/rightSide"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:text="Tech Talk"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:gravity="start|center_vertical"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/desc"
+                android:textColor="#848383"
+                android:text="some random tech talk that I really don't want to go to but I did it asjkdjaskdsadjaksdjaksdjkasjd askdjaksjd askdjaskd askdjaskd"
+                android:gravity="center_vertical|start"
+                android:maxLines="5"
+                android:ellipsize="end"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="3dp"
+            android:paddingBottom="2dp"
+            android:id="@+id/rightSide"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/desc"
-            android:textColor="#848383"
-            android:text="some random tech talk that I really don't want to go to but I did it asjkdjaskdsadjaksdjaksdjkasjd askdjaksjd askdjaskd askdjaskd"
-            android:gravity="center_vertical|start"
-            android:maxLines="5"
-            android:ellipsize="end"
-            android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
+            android:minHeight="?android:attr/listPreferredItemHeightSmall"
+            android:textAppearance="?android:attr/textAppearanceListItemSmall"
+            android:gravity="end|center_vertical"
+            android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+            android:paddingStart="?android:attr/listPreferredItemPaddingStart" >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" >
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/event_time"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/event_time"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:paddingStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/time"
+                    android:textColor="@android:color/black"
+                    android:text="2:00 - 4:30 AM"
+                    android:layout_centerVertical="true"
+                    android:textAlignment="textStart"
+                    android:layout_toEndOf="@+id/event_time"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" >
+
+                <ImageView
+                    android:id="@+id/event_location"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/event_location"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:paddingStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/distance"
+                    android:text="0 Miles"
+                    android:textAlignment="textStart"
+                    android:textColor="@android:color/black"
+                    android:layout_toEndOf="@id/event_location"
+                    android:gravity="end|center_vertical"
+                    android:layout_centerVertical="true"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start" >
+
+                <ImageView
+                    android:id="@+id/event_ppl"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/event_ppl"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:paddingStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/attending"
+                    android:text="0 Attendees"
+                    android:layout_toEndOf="@+id/event_ppl"
+                    android:textAlignment="textStart"
+                    android:layout_centerVertical="true"
+                    android:textColor="@android:color/black"
+                    android:gravity="end|center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:paddingTop="3dp"
-        android:paddingBottom="2dp"
-        android:id="@+id/rightSide"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_alignParentEnd="true"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:gravity="end|center_vertical"
-        android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart" >
-        <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:weightSum="3"
+        android:background="#F2F1F2"
+        android:id="@+id/join_or_back">
+        <Button
+            android:id="@+id/join_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start" >
+            android:text="Join"
+            android:background="#3383B2"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:id="@+id/event_time"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/event_time"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:paddingStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/time"
-                android:textColor="@android:color/black"
-                android:text="2:00 - 4:30 AM"
-                android:layout_centerVertical="true"
-                android:textAlignment="textStart"
-                android:layout_toEndOf="@+id/event_time"
-                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start" >
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:id="@+id/event_location"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/event_location"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:paddingStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/distance"
-                android:text="0 Miles"
-                android:textAlignment="textStart"
-                android:textColor="@android:color/black"
-                android:layout_toEndOf="@id/event_location"
-                android:gravity="end|center_vertical"
-                android:layout_centerVertical="true"
-                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <Button
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start" >
-
-            <ImageView
-                android:id="@+id/event_ppl"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/event_ppl"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:paddingStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/attending"
-                android:text="0 Attendees"
-                android:layout_toEndOf="@+id/event_ppl"
-                android:textAlignment="textStart"
-                android:layout_centerVertical="true"
-                android:textColor="@android:color/black"
-                android:gravity="end|center_vertical"
-                android:textAppearance="?android:attr/textAppearanceListItemSmall" />
-
-
-        </RelativeLayout>
-
-
-
+            android:text="Back"
+            android:background="#ACACAD"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"/>
     </LinearLayout>
 
-</RelativeLayout>
+
+</ViewSwitcher>
