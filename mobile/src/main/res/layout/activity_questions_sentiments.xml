@@ -16,7 +16,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
         <include layout="@layout/content_questions" />
 
-        <include layout="@layout/content_sentiments" />
+        <RelativeLayout
+            android:id="@+id/sentiments_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/content_sentiments" />
+        </RelativeLayout>
 
     </ViewSwitcher>
 

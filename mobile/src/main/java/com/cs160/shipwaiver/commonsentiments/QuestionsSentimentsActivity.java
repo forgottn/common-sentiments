@@ -112,4 +112,9 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
         });
     }
 
+
+    public void onSentimentClicked(View view) {
+        
+    }
+
 }
