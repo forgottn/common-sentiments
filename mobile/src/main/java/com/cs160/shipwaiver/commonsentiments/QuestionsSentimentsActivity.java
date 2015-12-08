@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.parse.FindCallback;
@@ -18,12 +22,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class QuestionsSentimentsActivity extends AppCompatActivity {
 
     QuestionAdapter adapter;
     private ArrayList<ParseObject> mQuestionList = new ArrayList<>();
+    private HashMap<String, Integer> mSentiments = new HashMap<>();
 
     public ListView mQuestionListView;
     public String mParseObjectID;
@@ -86,13 +92,14 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
             }
         });
 
-        getQuestionList();
+        getQuestionListAndSentiments();
     }
 
-    private void getQuestionList() {
+    private void getQuestionListAndSentiments() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
         query.whereEqualTo("objectId", mParseObjectID);
         query.include("questions");
+        query.include("sentiments");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -105,6 +112,12 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
                         mQuestionList.clear();
                     }
                     adapter.notifyDataSetChanged();
+
+//                    List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
+//                    for (int i = 0; i < sentimentObjects.size(); i++) {
+//                        ParseObject sentiment = sentimentObjects.get(i);
+//                        mSentiments.put(sentiment.getString("name"), sentiment.getInt("upvoteCount"));
+//                    }
                 } else {
                     e.printStackTrace();
                 }
@@ -114,7 +127,17 @@ public class QuestionsSentimentsActivity extends AppCompatActivity {
 
 
     public void onSentimentClicked(View view) {
-        
+        ImageView emoClicked = (ImageView) view;
+//        int emoID = emoClicked.getId();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.content_sentiment_clicked, null, false);
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);
+        ImageView emo = (ImageView) layout.findViewById(R.id.emo);
+        emo.setImageDrawable(emoClicked.getDrawable());
+
+        TextView emoTitle = (TextView) layout.findViewById(R.id.emo_title);
+
+        TextView emoVotes = (TextView) layout.findViewById(R.id.emo_votes)
     }
 
 }
