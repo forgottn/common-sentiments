@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +21,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +61,7 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
 
 
 
-        adapter = new QuestionAdapter(getApplicationContext(), mQuestionList);
+        adapter = new QuestionAdapter(getApplicationContext(), mQuestionList, mParseObjectID);
 
         mExitEventButton = (ImageView) findViewById(R.id.menu_close);
         mExitEventButton.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +133,6 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
                     List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
                     for (int i = 0; i < sentimentObjects.size(); i++) {
                         ParseObject sentiment = sentimentObjects.get(i);
-                        android.util.Log.e("oh", "PUTTING IN " + sentiment.getString("viewId"));
                         mSentiments.put(sentiment.getString("viewId"), sentiment);
                     }
                 } else {

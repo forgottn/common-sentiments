@@ -2,6 +2,7 @@ package com.cs160.shipwaiver.commonsentiments;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -21,11 +26,13 @@ import java.util.List;
  */
 public class QuestionAdapter extends BaseAdapter {
 
-    private ArrayList<ParseObject> questionList = new ArrayList<>();
+    private ArrayList<ParseObject> questionList;
     private Context context;
+    private String eventID;
 
-    public QuestionAdapter(Context context, ArrayList<ParseObject> questionList) {
+    public QuestionAdapter(Context context, ArrayList<ParseObject> questionList, String eventID) {
         super();
+        this.eventID = eventID;
         this.questionList = questionList;
         this.context = context;
     }
@@ -72,10 +79,32 @@ public class QuestionAdapter extends BaseAdapter {
                 boolean clickedUpvote = question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser());
                 if (clickedUpvote) {
                     question.increment("upvoteCount", -1);
-                    question.removeAll("clickedUpvoteUsers", Collections.singletonList(ParseUser.getCurrentUser()));
-                    question.saveInBackground();
-                    text2.setText(String.format("%d", question.getInt("upvoteCount")));
-                    text2.setTextColor(Color.parseColor("#848383"));
+                    if (question.getInt("upvoteCount") == 0) {
+                        questionList.remove(question);
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+                        query.whereEqualTo("objectId", eventID);
+                        query.include("questions");
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if (e == null) {
+                                    Log.d("Remove", "Question should be removed from list");
+                                    object.removeAll("questions", Collections.singletonList(question));
+                                    object.saveInBackground();
+                                    question.deleteInBackground();
+                                    notifyDataSetChanged();
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                    } else {
+                        question.removeAll("clickedUpvoteUsers", Collections.singletonList(ParseUser.getCurrentUser()));
+                        question.saveInBackground();
+                        text2.setText(String.format("%d", question.getInt("upvoteCount")));
+                        text2.setTextColor(Color.parseColor("#848383"));
+                    }
                 } else {
                     text2.setTextColor(Color.parseColor("#5CBFEA"));
                     question.increment("upvoteCount");
@@ -105,8 +134,23 @@ public class QuestionAdapter extends BaseAdapter {
                     question.increment("flagCount");
                     question.add("clickedFlagUsers", ParseUser.getCurrentUser());
                     if (question.getInt("flagCount") >= 3) {
-                        question.deleteInBackground();
-                        notifyDataSetChanged();
+                        questionList.remove(question);
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+                        query.whereEqualTo("objectId", eventID);
+                        query.include("questions");
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if (e == null) {
+                                    object.removeAll("questions", Collections.singletonList(question));
+                                    object.saveInBackground();
+                                    question.deleteInBackground();
+                                    notifyDataSetChanged();
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     } else {
                         question.saveInBackground();
                     }

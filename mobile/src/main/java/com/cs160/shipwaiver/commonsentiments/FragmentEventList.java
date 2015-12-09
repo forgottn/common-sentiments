@@ -25,10 +25,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,12 +108,30 @@ public class FragmentEventList extends Fragment implements
                 joinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("objectID", entry.getObjectId());
-                        Intent i = new Intent(mContext, ActivityQuestionSentimentList.class);
-                        i.putExtra("objectID", entry.getObjectId());
-                        viewSwitcher.showPrevious();
-                        mActiveViewSwitcher = null;
-                        startActivity(i);
+                        ParseQuery<ParseUser> query = ParseUser.getQuery();
+                        query.include("events");
+                        query.getInBackground(ParseUser.getCurrentUser().getObjectId(),
+                                new GetCallback<ParseUser>() {
+                                    @Override
+                                    public void done(ParseUser object, ParseException e) {
+                                        if (e == null) {
+                                            if (!object.getList("events").contains(entry)) {
+                                                object.add("events", entry);
+                                                entry.increment("numberAttending");
+                                                object.saveInBackground();
+                                                entry.saveInBackground();
+                                            }
+                                            Intent i = new Intent(mContext, ActivityQuestionSentimentList.class);
+                                            i.putExtra("objectID", entry.getObjectId());
+                                            viewSwitcher.showPrevious();
+                                            mActiveViewSwitcher = null;
+                                            startActivity(i);
+
+                                        } else {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
                     }
                 });
 
@@ -199,7 +219,6 @@ public class FragmentEventList extends Fragment implements
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        Log.d("Location", "Changed");
         handleNewLocation();
     }
 
