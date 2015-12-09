@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.wearable.view.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cs160.shipwaiver.commonsentiments.ActivityTabLayout"
-    tools:deviceIds="wear">
+    android:gravity="center"
+    android:layout_gravity="center"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    tools:deviceIds="wear_round"
+    android:background="#fff">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_world"
-        app:layout_box="all" />
-
-    <TextView
-        android:id="@+id/clock"
+    <ImageView
+        android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:textColor="@android:color/white"
-        app:layout_box="all" />
+        android:src="@drawable/logo"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="55dp" />
 
-</android.support.wearable.view.BoxInsetLayout>
+    <TextView android:id="@+id/wait_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please start the application from   your phone"
+        android:textColor="#767777"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:textAlignment="center"
+        android:layout_alignBottom="@+id/logo"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
+
