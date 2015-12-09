@@ -32,6 +32,7 @@ public class PresenterNotificationListener extends Service implements
     private static final int SECOND = 1000;
     private static final double THRESHOLD = 0.1;
     private GoogleApiClient mGoogleApiClient;
+    private CountDownTimer timer;
 
     private String mObjectID;
 
@@ -63,7 +64,7 @@ public class PresenterNotificationListener extends Service implements
     }
 
     private void createAndStartTimer() {
-        CountDownTimer timer = new CountDownTimer(INTERVAL, SECOND) {
+       timer = new CountDownTimer(INTERVAL, SECOND) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -158,6 +159,7 @@ public class PresenterNotificationListener extends Service implements
     public void onDestroy() {
         super.onDestroy();
         Log.d("DESTROY", "PLS");
+        timer.cancel();
         mGoogleApiClient.disconnect();
     }
 
