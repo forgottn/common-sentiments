@@ -112,6 +112,8 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
         query.whereEqualTo("objectId", mParseObjectID);
         query.include("questions");
         query.include("sentiments");
+        query.include("questions.clickedUpvoteUsers");
+        query.include("questions.clickedFlagUsers");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -125,7 +127,6 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
                     }
                     adapter.notifyDataSetChanged();
 
-                    android.util.Log.e("oh", "STARTING PUTTT");
                     List<ParseObject> sentimentObjects = objects.get(0).getList("sentiments");
                     for (int i = 0; i < sentimentObjects.size(); i++) {
                         ParseObject sentiment = sentimentObjects.get(i);
