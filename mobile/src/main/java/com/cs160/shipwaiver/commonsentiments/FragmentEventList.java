@@ -157,8 +157,6 @@ public class FragmentEventList extends Fragment implements
 
     private void getEventList() {
         ParseGeoPoint userLocation = new ParseGeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
-        Log.d("Latitude", String.format("%.2f", myLocation.getLatitude()));
-        Log.d("Longitude", String.format("%.2f", myLocation.getLongitude()));
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
         query.whereWithinMiles("location", userLocation, 5.0);
         query.whereGreaterThan("endDate", new Date());
@@ -169,7 +167,6 @@ public class FragmentEventList extends Fragment implements
 
                 if (e == null) {
                     if (objects.size() > 0) {
-                        Log.d("pls", objects.get(0).getString("name"));
                         mEventList = new ArrayList<>(objects);
                         adapter.setListData(mEventList);
                     } else {
@@ -188,7 +185,6 @@ public class FragmentEventList extends Fragment implements
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation != null) {
-            Log.d("Location", "same");
             handleNewLocation();
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);

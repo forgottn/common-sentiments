@@ -79,7 +79,7 @@ public class QuestionAdapter extends BaseAdapter {
                 boolean clickedUpvote = question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser());
                 if (clickedUpvote) {
                     question.increment("upvoteCount", -1);
-                    if (question.getInt("upvoteCount") == 0) {
+                    if (question.getInt("upvoteCount") <= 0) {
                         questionList.remove(question);
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
                         query.whereEqualTo("objectId", eventID);

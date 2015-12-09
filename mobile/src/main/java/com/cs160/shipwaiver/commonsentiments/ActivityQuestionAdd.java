@@ -1,6 +1,8 @@
 package com.cs160.shipwaiver.commonsentiments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +36,29 @@ public class ActivityQuestionAdd extends AppCompatActivity {
     public void onButtonClicked(View view) {
         switch (view.getId()) {
             case R.id.cancel_button:
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Are you sure you want to cancel?");
+
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
             case R.id.post_button:
                 if (mQuestionText.getText().length() > 0) {
