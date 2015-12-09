@@ -26,10 +26,10 @@ import java.util.List;
 public class FragmentPastEventList extends Fragment {
 
     private Context mContext;
-    private PastEventAdapter adapter;
-    private ArrayList<ParseObject> mEventList = new ArrayList<>();
+    private PastEventAdapter pastEventAdapter;
+    private ArrayList<ParseObject> mPastEventList = new ArrayList<>();
 
-    public ListView mListView;
+    public ListView mPastListView;
 
 
     @Override
@@ -37,12 +37,12 @@ public class FragmentPastEventList extends Fragment {
         View rootView =  inflater.inflate(R.layout.fragment_past_event_list, container, false);
         mContext = getActivity();
 
-        adapter = new PastEventAdapter(mContext.getApplicationContext(), mEventList);
+        pastEventAdapter = new PastEventAdapter(mContext.getApplicationContext(), mPastEventList);
 
-        mListView = (ListView) rootView.findViewById(R.id.past_event_list);
-        mListView.setAdapter(adapter);
+        mPastListView = (ListView) rootView.findViewById(R.id.past_event_list);
+        mPastListView.setAdapter(pastEventAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPastListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final ParseObject entry = (ParseObject) parent.getItemAtPosition(position);
@@ -61,6 +61,7 @@ public class FragmentPastEventList extends Fragment {
     private void getEventList() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.include("events");
+        query.addAscendingOrder("startDate");
         query.getInBackground(ParseUser.getCurrentUser().getObjectId(),
                 new GetCallback<ParseUser>() {
                     @Override
@@ -68,16 +69,17 @@ public class FragmentPastEventList extends Fragment {
                         if (e == null) {
                             if (object.getList("events").size() > 0) {
                                 List<ParseObject> pastEvents = object.getList("events");
-                                mEventList = new ArrayList<>();
+                                mPastEventList = new ArrayList<>();
                                 for (ParseObject event : pastEvents) {
-                                    if (event.getDate("endDate").before(new Date())) {
-                                        mEventList.add(event);
+                                    if (event.getDate("endDate").compareTo(new Date()) < 0) {
+                                        mPastEventList.add(event);
                                     }
                                 }
-                                adapter.setListData(mEventList);
+                                pastEventAdapter.setListData(mPastEventList);
                             } else {
-                                mEventList.clear();
+                                mPastEventList.clear();
                             }
+                            pastEventAdapter.notifyDataSetChanged();
                         } else {
                             e.printStackTrace();
                         }

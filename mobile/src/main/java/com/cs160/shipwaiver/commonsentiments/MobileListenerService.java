@@ -2,6 +2,7 @@ package com.cs160.shipwaiver.commonsentiments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
@@ -14,12 +15,14 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MobileListenerService extends WearableListenerService implements
@@ -29,7 +32,7 @@ public class MobileListenerService extends WearableListenerService implements
 
     private static final String CLICK_SENTIMENT = "/com.cs160.shipwaiver.commonsentiments.click_sentiment";
     private static final String DISPLAY_SENTIMENT = "/com.cs160.shipwaiver.commonsentiments.display_sentiment";
-
+    private static final String CLICK_VOTE = "/com.cs160.shipwaiver.commonsentiments.click_vote";
 
     @Override
     public void onCreate() {
@@ -88,6 +91,7 @@ public class MobileListenerService extends WearableListenerService implements
                                         JSONArray clickedUsersArray = sentimentObject.getJSONArray("clickedUsers");
                                         sentiment.put("clickedUsers", clickedUsersArray);
                                         sentiment.put("sentimentIDAsString", sentimentIDAsString);
+                                        sentiment.put("sentimentObjectId", sentimentObject.getObjectId());
                                         sendMessage(DISPLAY_SENTIMENT, sentiment.toString());
                                         break;
                                     }
@@ -103,8 +107,23 @@ public class MobileListenerService extends WearableListenerService implements
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
+        } else if (messageEvent.getPath().equals(CLICK_VOTE)) {
+            String sentimentObjectId = new String(messageEvent.getData());
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Sentiment");
+            query.whereEqualTo("objectId", sentimentObjectId);
+            query.include("clickedUsers");
+            Log.d("SentimentObject", sentimentObjectId);
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    Log.d("MobileListenr", "C'mon");
+                    if (!object.getList("clickedUsers").contains(ParseUser.getCurrentUser())) {
+                        object.increment("upvoteCount");
+                        object.add("clickedUsers", ParseUser.getCurrentUser());
+                        object.saveInBackground();
+                    }
+                }
+            });
         }
     }
 

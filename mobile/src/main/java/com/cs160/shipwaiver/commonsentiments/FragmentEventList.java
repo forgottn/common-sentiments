@@ -142,8 +142,6 @@ public class FragmentEventList extends Fragment implements
                                             try {
                                                 JSONObject event = new JSONObject();
                                                 event.put("objectId", entry.getObjectId());
-                                                Log.d("FragmentEventList", ParseUser.getCurrentUser().getObjectId());
-                                                Log.d("FragmentEventList", entry.getParseUser("presenter").getObjectId());
                                                 event.put("isPresenter", presenter);
                                                 sendMessage(JOIN_EVENT, event.toString());
                                             } catch (JSONException err) {
