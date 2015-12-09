@@ -1,11 +1,5 @@
 package com.cs160.shipwaiver.commonsentiments;
 
-import android.content.Context;
-
-import com.parse.ParseObject;
-
-import java.util.ArrayList;
-
 /**
  * Created by forgottn on 11/19/15.
  */

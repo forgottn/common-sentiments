@@ -1,12 +1,8 @@
 package com.cs160.shipwaiver.commonsentiments;
 
 import android.app.Application;
-import android.util.Log;
 
-import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseAnonymousUtils;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 

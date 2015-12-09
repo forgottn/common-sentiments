@@ -3,7 +3,6 @@ package com.cs160.shipwaiver.commonsentiments;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.GetCallback;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class Event {
     public static void add(Context context, HashMap<String, String> values, final SaveCallback saveCallback) {
@@ -56,7 +56,7 @@ public class Event {
                             public void done(ParseObject object, ParseException e) {
                                 if (e == null) {
                                     List<ParseObject> events = object.getList("events");
-                                    ArrayList<ParseObject> eventArrayList = new ArrayList<ParseObject>(events);
+                                    ArrayList<ParseObject> eventArrayList = new ArrayList<>(events);
                                     eventArrayList.add(event);
                                     object.put("events", eventArrayList);
                                     object.saveInBackground(saveCallback);
@@ -101,11 +101,10 @@ public class Event {
     }
 
     private static Date getDateFromString(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMM dd, yyyy h:mm aaa");
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMM dd, yyyy h:mm aaa", Locale.getDefault());
         try {
             return format.parse(date);
         } catch (java.text.ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;

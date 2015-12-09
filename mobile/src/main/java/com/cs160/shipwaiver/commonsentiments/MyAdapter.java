@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by forgottn on 10/15/15.
- */
 public class MyAdapter extends BaseAdapter {
 
     private ArrayList<ParseObject> eventList = new ArrayList<>();
