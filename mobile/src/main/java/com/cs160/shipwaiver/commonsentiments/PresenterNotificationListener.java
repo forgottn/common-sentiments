@@ -18,6 +18,9 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class PresenterNotificationListener extends Service implements
 
     private static final int INTERVAL = 30000;
     private static final int SECOND = 1000;
-    private static final double THRESHOLD = 0.3;
+    private static final double THRESHOLD = 0.1;
     private GoogleApiClient mGoogleApiClient;
 
     private String mObjectID;
@@ -68,6 +71,7 @@ public class PresenterNotificationListener extends Service implements
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        Log.d("PresenterNotification", "Should get here");
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
                         query.whereEqualTo("objectId", mObjectID);
                         query.include("sentiments");
@@ -79,7 +83,18 @@ public class PresenterNotificationListener extends Service implements
                                 List<ParseObject> sentimentsList = object.getList("sentiments");
                                 ArrayList<ParseObject> sentiments = new ArrayList<>(sentimentsList);
                                 for (ParseObject sentiment : sentiments) {
-                                    if (sentiment.getDouble("upvoteCount") / numberAttending >= THRESHOLD) {
+                                    double upvoteCount = sentiment.getDouble("upvoteCount");
+                                    double audiencePercent = upvoteCount / numberAttending * 100;
+                                    if (upvoteCount / numberAttending >= THRESHOLD) {
+                                        try {
+                                            Log.d("PresenterNotfication", "Got here");
+                                            JSONObject notification = new JSONObject();
+                                            notification.put("audiencePercent", audiencePercent);
+                                            notification.put("content", sentiment.get("name"));
+                                            sendMessage(SENTIMENT_NOTIFICATION, notification.toString());
+                                        } catch (JSONException err) {
+                                            err.printStackTrace();
+                                        }
                                         // Send a small notification to watch
 //                                        sendMessage();
                                     }
@@ -100,6 +115,8 @@ public class PresenterNotificationListener extends Service implements
                 createAndStartTimer();
             }
         };
+
+        timer.start();
     }
 
         @Override

@@ -30,6 +30,7 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -120,6 +121,7 @@ public class FragmentEventList extends Fragment implements
                     public void onClick(View v) {
                         ParseQuery<ParseUser> query = ParseUser.getQuery();
                         query.include("events");
+                        query.include("presenter");
                         query.getInBackground(ParseUser.getCurrentUser().getObjectId(),
                                 new GetCallback<ParseUser>() {
                                     @Override
@@ -138,8 +140,11 @@ public class FragmentEventList extends Fragment implements
                                             try {
                                                 JSONObject event = new JSONObject();
                                                 event.put("objectId", entry.getObjectId());
+                                                Log.d("FragmentEventList", ParseUser.getCurrentUser().getObjectId());
+                                                Log.d("FragmentEventList", entry.getParseUser("presenter").getObjectId());
                                                 boolean presenter = entry.getParseUser("presenter") == ParseUser.getCurrentUser();
                                                 if (presenter) {
+                                                    Log.d("FragmentEventList", "presenter is same");
                                                     Intent service = new Intent(mContext, PresenterNotificationListener.class);
                                                     service.putExtra("objectID", entry.getObjectId());
                                                     mContext.startService(service);

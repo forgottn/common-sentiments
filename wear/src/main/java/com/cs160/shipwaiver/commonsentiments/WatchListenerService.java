@@ -1,7 +1,13 @@
 package com.cs160.shipwaiver.commonsentiments;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
@@ -50,8 +56,29 @@ public class WatchListenerService extends WearableListenerService {
                 e.printStackTrace();
             }
         } else if (messageEvent.getPath().equalsIgnoreCase(SENTIMENT_NOTIFICATION)) {
-            // Build notificaiton and display
+            try {
+                JSONObject notification = new JSONObject(new String(messageEvent.getData()));
+                String contentTitle = String.format("%.0f%% audiences", notification.getDouble("audiencePercent"));
+                String notificationText = notification.getString("content");
+                // Build notificaiton and display
+                Bitmap bitmap = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
+                bitmap.eraseColor(Color.parseColor("#3283B2"));
 
+
+                NotificationCompat.Builder notificationBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setContentTitle(contentTitle)
+                                .setContentText(notificationText)
+                                .setSmallIcon(R.drawable.logo_small)
+                                .extend(new NotificationCompat.WearableExtender().setBackground(bitmap));
+
+
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                notificationManager.notify(0, notificationBuilder.build());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } else if (messageEvent.getPath().equalsIgnoreCase(QUESTION_NOTIFICATION)) {
             // Build notification and display
 
