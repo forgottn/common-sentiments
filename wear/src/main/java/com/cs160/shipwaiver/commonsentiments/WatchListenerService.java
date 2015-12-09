@@ -53,6 +53,7 @@ public class WatchListenerService extends WearableListenerService {
                 i.putExtra("upvoteCount", sentiment.getInt("upvoteCount"));
                 i.putExtra("clickedUsers", sentiment.getJSONArray("clickedUsers").toString());
                 i.putExtra("sentimentIDAsString", sentiment.getString("sentimentIDAsString"));
+                i.putExtra("sentimentObjectId", sentiment.getString("sentimentObjectId"));
                 startActivity(i);
             } catch (JSONException e) {
                 e.printStackTrace();
