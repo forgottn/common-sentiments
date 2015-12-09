@@ -60,13 +60,8 @@ public class QuestionAdapter extends BaseAdapter {
         text1.setText(question.getString("question"));
         text2.setText(String.format("%d", question.getInt("upvoteCount")));
 
-        List<ParseUser> upvoteUsersList = question.getList("clickedUpvoteUsers");
-        List<ParseUser> flagUsersList = question.getList("clickedFlagUsers");
-        final ArrayList<ParseUser> upvoteUsers = new ArrayList<>(upvoteUsersList);
-        final ArrayList<ParseUser> flagUsers = new ArrayList<>(flagUsersList);
-
-        final boolean clickedUpvote = upvoteUsers.contains(ParseUser.getCurrentUser());
-        final boolean clickedFlag = flagUsers.contains(ParseUser.getCurrentUser());
+        final boolean clickedUpvote = question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser());
+        final boolean clickedFlag = question.getList("clickedFlagUsers").contains(ParseUser.getCurrentUser());
 
         if (clickedUpvote) {
             text2.setTextColor(Color.parseColor("#5CBFEA"));
@@ -81,8 +76,7 @@ public class QuestionAdapter extends BaseAdapter {
                 } else {
                     text2.setTextColor(Color.parseColor("#5CBFEA"));
                     question.increment("upvoteCount");
-                    upvoteUsers.add(ParseUser.getCurrentUser());
-                    question.put("clickedUpvoteUsers", upvoteUsers);
+                    question.add("clickedUpvoteUsers", ParseUser.getCurrentUser());
                     question.saveInBackground();
                     text2.setText(String.format("%d", question.getInt("upvoteCount")));
                 }
@@ -102,8 +96,7 @@ public class QuestionAdapter extends BaseAdapter {
                 } else {
                     flag.setImageDrawable(context.getDrawable(R.drawable.flag_clicked));
                     question.increment("flagCount");
-                    flagUsers.add(ParseUser.getCurrentUser());
-                    question.put("clickedFlagUsers", flagUsers);
+                    question.add("clickedFlagUsers", ParseUser.getCurrentUser());
                     if (question.getInt("flagCount") >= 3) {
                         question.deleteInBackground();
                     } else {

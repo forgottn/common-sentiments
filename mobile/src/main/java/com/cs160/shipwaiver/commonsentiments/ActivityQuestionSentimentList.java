@@ -18,8 +18,11 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -114,6 +117,7 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
         query.include("sentiments");
         query.include("questions.clickedUpvoteUsers");
         query.include("questions.clickedFlagUsers");
+        query.include("sentiments.clickedUsers");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -144,7 +148,6 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
     public void onSentimentClicked(View view) {
         ImageView emoClicked = (ImageView) view;
         final String idAsString = view.getResources().getResourceName(view.getId()).split("/")[1];
-        android.util.Log.e("lol", "WHOAAAAAAAAAA " + idAsString);
         LayoutInflater inflater = LayoutInflater.from(this);
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.content_sentiment_clicked, null, false);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.sentiments_container);
@@ -170,14 +173,30 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
             }
         });
 
-        Button voteButton = (Button) layout.findViewById(R.id.emo_vote_button);
+        final Button voteButton = (Button) layout.findViewById(R.id.emo_vote_button);
+        final ParseObject currentSentiment = mSentiments.get(idAsString);
+        final boolean clickedSentiment = currentSentiment.getList("clickedUsers").contains(ParseUser.getCurrentUser());
+
+        if (clickedSentiment) {
+            voteButton.setText("Unvote");
+        }
+
         voteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSentiments.get(idAsString).increment("upvoteCount");
-                mSentiments.get(idAsString).saveInBackground();
-                TextView emoVotes = (TextView) findViewById(R.id.emo_votes);
-                emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
+                if (clickedSentiment) {
+                    currentSentiment.increment("upvoteCount", -1);
+                    currentSentiment.removeAll("clickedUsers", Collections.singletonList(ParseUser.getCurrentUser()));
+                    currentSentiment.saveInBackground();
+                    voteButton.setText("Vote");
+                } else {
+                    currentSentiment.increment("upvoteCount");
+                    currentSentiment.add("clickedUsers", ParseUser.getCurrentUser());
+                    currentSentiment.saveInBackground();
+                    TextView emoVotes = (TextView) findViewById(R.id.emo_votes);
+                    emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
+                    voteButton.setText("Unvote");
+                }
             }
         });
 
