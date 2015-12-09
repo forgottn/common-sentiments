@@ -1,10 +1,14 @@
 package com.cs160.shipwaiver.commonsentiments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -19,6 +23,19 @@ public class ActivityTabLayout extends AppCompatActivity {
 
         viewPager.setAdapter(new SectionPagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
+
+        ensureLocationPermission();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ensureLocationPermission();
+    }
+
+    private void ensureLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 1);
     }
 
     public class SectionPagerAdapter extends FragmentPagerAdapter {
