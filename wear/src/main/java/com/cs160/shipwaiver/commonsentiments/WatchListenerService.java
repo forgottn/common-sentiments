@@ -35,7 +35,9 @@ public class WatchListenerService extends WearableListenerService {
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 i.putExtra("objectID", objectID);
-                startActivity(i);
+                if (!object.getBoolean("isPresenter")) {
+                    startActivity(i);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -55,8 +57,9 @@ public class WatchListenerService extends WearableListenerService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (messageEvent.getPath().equalsIgnoreCase(SENTIMENT_NOTIFICATION)) {
+        } else if (messageEvent.getPath().equalsIgnoreCase(SENTIMENT_NOTIFICATION) || messageEvent.getPath().equalsIgnoreCase(QUESTION_NOTIFICATION)) {
             try {
+                Log.d("WatchListener", "Sentiment Notification");
                 JSONObject notification = new JSONObject(new String(messageEvent.getData()));
                 String contentTitle = String.format("%.0f%% audiences", notification.getDouble("audiencePercent"));
                 String notificationText = notification.getString("content");
@@ -64,11 +67,11 @@ public class WatchListenerService extends WearableListenerService {
                 Bitmap bitmap = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
                 bitmap.eraseColor(Color.parseColor("#3283B2"));
 
-
                 NotificationCompat.Builder notificationBuilder =
                         new NotificationCompat.Builder(this)
                                 .setContentTitle(contentTitle)
                                 .setContentText(notificationText)
+                                .setDefaults(Notification.DEFAULT_ALL)
                                 .setSmallIcon(R.drawable.logo_small)
                                 .extend(new NotificationCompat.WearableExtender().setBackground(bitmap));
 
@@ -79,9 +82,6 @@ public class WatchListenerService extends WearableListenerService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        } else if (messageEvent.getPath().equalsIgnoreCase(QUESTION_NOTIFICATION)) {
-            // Build notification and display
-
         } else {
             super.onMessageReceived( messageEvent );
         }

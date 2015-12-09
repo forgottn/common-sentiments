@@ -35,6 +35,9 @@ public class PresenterNotificationListener extends Service implements
 
     private String mObjectID;
 
+    private JSONObject sentNotification;
+    private JSONObject sentQuestionNotification;
+
     private static final String SENTIMENT_NOTIFICATION = "/com.cs160.shipwaiver.commonsentiments.sentiment_notification";
     private static final String QUESTION_NOTIFICATION = "/com.cs160.shipwaiver.commonsentiments.question_notification";
 
@@ -72,7 +75,7 @@ public class PresenterNotificationListener extends Service implements
                     @Override
                     public void run() {
                         Log.d("PresenterNotification", "Should get here");
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
+                        final ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
                         query.whereEqualTo("objectId", mObjectID);
                         query.include("sentiments");
                         query.include("questions");
@@ -82,30 +85,62 @@ public class PresenterNotificationListener extends Service implements
                                 double numberAttending = object.getDouble("numberAttending");
                                 List<ParseObject> sentimentsList = object.getList("sentiments");
                                 ArrayList<ParseObject> sentiments = new ArrayList<>(sentimentsList);
-                                for (ParseObject sentiment : sentiments) {
-                                    double upvoteCount = sentiment.getDouble("upvoteCount");
-                                    double audiencePercent = upvoteCount / numberAttending * 100;
-                                    if (upvoteCount / numberAttending >= THRESHOLD) {
-                                        try {
+                                try {
+                                    JSONObject topNotification = null;
+                                    double maxUpvote = 0.0;
+                                    for (ParseObject sentiment : sentiments) {
+                                        double upvoteCount = sentiment.getDouble("upvoteCount");
+                                        double audiencePercent = upvoteCount / numberAttending * 100;
+                                        if (upvoteCount / numberAttending >= THRESHOLD &&
+                                                upvoteCount > maxUpvote) {
                                             Log.d("PresenterNotfication", "Got here");
                                             JSONObject notification = new JSONObject();
                                             notification.put("audiencePercent", audiencePercent);
                                             notification.put("content", sentiment.get("name"));
-                                            sendMessage(SENTIMENT_NOTIFICATION, notification.toString());
-                                        } catch (JSONException err) {
-                                            err.printStackTrace();
-                                        }
-                                        // Send a small notification to watch
+                                            maxUpvote = upvoteCount;
+                                            topNotification = notification;
+                                            // Send a small notification to watch
 //                                        sendMessage();
+                                        }
                                     }
+                                    if (topNotification != null && (sentNotification == null ||
+                                            sentNotification.getDouble("audiencePercent") != topNotification.getDouble("audiencePercent")
+                                            || !sentNotification.getString("content").equals(topNotification.getString("content")))) {
+                                        sentNotification = topNotification;
+                                        sendMessage(SENTIMENT_NOTIFICATION, topNotification.toString());
+                                    }
+                                } catch (JSONException err) {
+                                    err.printStackTrace();
                                 }
 
                                 List<ParseObject> questionsList = object.getList("questions");
                                 ArrayList<ParseObject> questions = new ArrayList<>(questionsList);
-                                for (ParseObject question : questions) {
-                                    if (question.getDouble("upvoteCount") / numberAttending >= THRESHOLD) {
-                                        // Send a message to watch to make a bigger notification
+
+                                try {
+                                    JSONObject topQuestionNotification = null;
+                                    double maxQuestionUpvote = 0.0;
+                                    for (ParseObject question : questions) {
+                                        double upvoteCount = question.getDouble("upvoteCount");
+                                        double audiencePercent = upvoteCount / numberAttending * 100;
+                                        if (upvoteCount / numberAttending >= THRESHOLD &&
+                                                upvoteCount > maxQuestionUpvote) {
+                                            Log.d("PresenterNotfication", "Got here");
+                                            JSONObject notification = new JSONObject();
+                                            notification.put("audiencePercent", audiencePercent);
+                                            notification.put("content", question.get("question"));
+                                            maxQuestionUpvote = upvoteCount;
+                                            topQuestionNotification = notification;
+                                        }
                                     }
+
+                                    if ((topQuestionNotification != null && questions.size() > 0) && (sentQuestionNotification == null
+                                    || sentQuestionNotification.getDouble("audiencePercent") != topQuestionNotification.getDouble("audiencePercent")
+                                            || !sentQuestionNotification.getString("content").equals(topQuestionNotification.getString("content")))) {
+                                        sentQuestionNotification = topQuestionNotification;
+                                        sendMessage(QUESTION_NOTIFICATION, topQuestionNotification.toString());
+                                    }
+                                } catch (JSONException err) {
+                                    err.printStackTrace();
                                 }
                             }
                         });
@@ -119,9 +154,10 @@ public class PresenterNotificationListener extends Service implements
         timer.start();
     }
 
-        @Override
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("DESTROY", "PLS");
         mGoogleApiClient.disconnect();
     }
 

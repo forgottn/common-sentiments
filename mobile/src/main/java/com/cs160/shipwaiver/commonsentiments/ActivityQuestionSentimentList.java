@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,6 +48,14 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
 
         Bundle bun = getIntent().getExtras();
         mParseObjectID = bun.getString("objectID");
+        boolean presenter = bun.getBoolean("isPresenter");
+
+        if (presenter) {
+            Log.d("FragmentEventList", "presenter is same");
+            Intent service = new Intent(this, PresenterNotificationListener.class);
+            service.putExtra("objectID", mParseObjectID);
+            startService(service);
+        }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +76,7 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
         mExitEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stopService(new Intent(getBaseContext(), PresenterNotificationListener.class));
                 finish();
             }
         });

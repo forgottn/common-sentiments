@@ -134,6 +134,8 @@ public class FragmentEventList extends Fragment implements
                                                 entry.saveInBackground();
                                             }
                                             Intent i = new Intent(mContext, ActivityQuestionSentimentList.class);
+                                            boolean presenter = entry.getParseUser("presenter") == ParseUser.getCurrentUser();
+                                            i.putExtra("isPresenter", presenter);
                                             i.putExtra("objectID", entry.getObjectId());
                                             viewSwitcher.showPrevious();
                                             mActiveViewSwitcher = null;
@@ -142,13 +144,6 @@ public class FragmentEventList extends Fragment implements
                                                 event.put("objectId", entry.getObjectId());
                                                 Log.d("FragmentEventList", ParseUser.getCurrentUser().getObjectId());
                                                 Log.d("FragmentEventList", entry.getParseUser("presenter").getObjectId());
-                                                boolean presenter = entry.getParseUser("presenter") == ParseUser.getCurrentUser();
-                                                if (presenter) {
-                                                    Log.d("FragmentEventList", "presenter is same");
-                                                    Intent service = new Intent(mContext, PresenterNotificationListener.class);
-                                                    service.putExtra("objectID", entry.getObjectId());
-                                                    mContext.startService(service);
-                                                }
                                                 event.put("isPresenter", presenter);
                                                 sendMessage(JOIN_EVENT, event.toString());
                                             } catch (JSONException err) {
