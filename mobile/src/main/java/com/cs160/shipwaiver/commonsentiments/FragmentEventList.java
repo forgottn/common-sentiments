@@ -36,6 +36,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -132,7 +135,20 @@ public class FragmentEventList extends Fragment implements
                                             i.putExtra("objectID", entry.getObjectId());
                                             viewSwitcher.showPrevious();
                                             mActiveViewSwitcher = null;
-                                            sendMessage(JOIN_EVENT, entry.getObjectId());
+                                            try {
+                                                JSONObject event = new JSONObject();
+                                                event.put("objectId", entry.getObjectId());
+                                                boolean presenter = entry.getParseUser("presenter") == ParseUser.getCurrentUser();
+                                                if (presenter) {
+                                                    Intent service = new Intent(mContext, PresenterNotificationListener.class);
+                                                    service.putExtra("objectID", entry.getObjectId());
+                                                    mContext.startService(service);
+                                                }
+                                                event.put("isPresenter", presenter);
+                                                sendMessage(JOIN_EVENT, event.toString());
+                                            } catch (JSONException err) {
+                                                err.printStackTrace();
+                                            }
                                             startActivity(i);
 
                                         } else {

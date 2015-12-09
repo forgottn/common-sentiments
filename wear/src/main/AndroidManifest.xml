@@ -41,7 +41,8 @@
             android:label="@string/title_activity_sentiments" />
         <activity
             android:name=".SentimentDetailActivity"
-            android:label="@string/title_activity_sentiment_detail"></activity>
+            android:label="@string/title_activity_sentiment_detail" />
+
     </application>
 
 </manifest>
