@@ -6,4 +6,7 @@
     <string name="title_activity_questions">QuestionsActivity</string>
     <string name="title_activity_sentiments">SentimentsActivity</string>
     <string name="title_activity_add_question">AddQuestionActivity</string>
+    <string name="title_fragment_past_event_list">FragmentPastEventList</string>
+    <string name="title_fragment_event_list">FragmentEventList</string>
+    <string name="title_activity_tab_layout">ActivityTabLayout</string>
 </resources>

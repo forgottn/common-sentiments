@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ActivityEventList"
+            android:name=".ActivityTabLayout"
             android:label="@string/app_name_for_launcher"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -40,7 +40,7 @@
         <activity
             android:name=".ActivityQuestionAdd"
             android:label="@string/title_activity_add_question"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

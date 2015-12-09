@@ -3,23 +3,24 @@ package com.cs160.shipwaiver.commonsentiments;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.Parse;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by forgottn on 11/19/15.
- */
 public class Event {
-    public static void add(Context context, SaveCallback eventSaveCallback) {
+    public static void add(Context context, HashMap<String, String> values, final SaveCallback saveCallback) {
         String[] sentimentTitles = {"Confused", "Too Fast", "Too Slow", "Excited", "Thumbs Up", "Thumbs Down", "Sleepy", "Sad", "Angry"};
         String[] sentimentViewIds = {"emo_confused", "emo_toofast", "emo_slow", "emo_excited", "emo_thumbsu", "emo_thumbsd", "emo_sleepy", "emo_sad", "emo_angry"};
 
@@ -32,19 +33,46 @@ public class Event {
             sentiments.add(sentiment);
         }
 
-        ParseObject event = new ParseObject("Event");
-        event.put("name", "Tech Talk");
-        event.put("date", new Date());
-        event.put("startDate", new Date());
-        event.put("endDate", new Date());
-        event.put("description", "some random tech talk");
-        LatLng latlng = getLocationFromAddress(context, "2404 Fulton St. Berkeley, CA 94704");
+        final ParseObject event = new ParseObject("Event");
+        event.put("name", values.get("name"));
+        event.put("startDate", getDateFromString(values.get("startDate") + " " + values.get("startTime")));
+        event.put("endDate", getDateFromString(values.get("endDate") + " " + values.get("endTime")));
+        event.put("description", values.get("description"));
+        LatLng latlng = getLocationFromAddress(context, values.get("venue"));
         ParseGeoPoint point = new ParseGeoPoint(latlng.latitude, latlng.longitude);
         event.put("location", point);
-        event.put("numberAttending", 0);
         event.put("questions", new ArrayList<ParseObject>());
         event.put("sentiments", sentiments);
-        event.saveInBackground(eventSaveCallback);
+        event.put("numberAttending", 0);
+        if (values.get("status").equals("presenter")) {
+            event.put("presenter", ParseUser.getCurrentUser());
+            event.put("numberAttending", 1);
+            event.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        ParseUser.getCurrentUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject object, ParseException e) {
+                                if (e == null) {
+                                    List<ParseObject> events = object.getList("events");
+                                    ArrayList<ParseObject> eventArrayList = new ArrayList<ParseObject>(events);
+                                    eventArrayList.add(event);
+                                    object.put("events", eventArrayList);
+                                    object.saveInBackground(saveCallback);
+                                } else {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            event.saveInBackground(saveCallback);
+        }
     }
 
     public static LatLng getLocationFromAddress(Context context, String strAddress) {
@@ -70,5 +98,16 @@ public class Event {
         }
 
         return p1;
+    }
+
+    private static Date getDateFromString(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMM dd, yyyy h:mm aaa");
+        try {
+            return format.parse(date);
+        } catch (java.text.ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }

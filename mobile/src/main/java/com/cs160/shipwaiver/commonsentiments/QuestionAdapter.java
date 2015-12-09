@@ -76,7 +76,11 @@ public class QuestionAdapter extends BaseAdapter {
             public void onClick(View v) {
                 flag.setImageDrawable(context.getDrawable(R.drawable.flag_clicked));
                 question.increment("flagCount");
-                question.saveInBackground();
+                if (question.getInt("flagCount") >= 3) {
+                    question.deleteInBackground();
+                } else {
+                    question.saveInBackground();
+                }
             }
         });
 

@@ -1,15 +1,18 @@
 package com.cs160.shipwaiver.commonsentiments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -28,10 +31,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-public class ActivityEventList extends AppCompatActivity implements
+public class FragmentEventList extends Fragment implements
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener,
     LocationListener {
@@ -40,6 +44,8 @@ public class ActivityEventList extends AppCompatActivity implements
 
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
+
+    private Context mContext;
 
 
     private MyLocation myLocation;
@@ -52,26 +58,26 @@ public class ActivityEventList extends AppCompatActivity implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_list);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView =  inflater.inflate(R.layout.fragment_event_list, container, false);
+        mContext = getActivity();
         myLocation = new MyLocation();
+
 
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(10000); // 1 second, in milliseconds
 
-        mGoogleApiClient = new GoogleApiClient.Builder( this )
-            .addApi(LocationServices.API)
-            .addOnConnectionFailedListener(this)
-            .addConnectionCallbacks(this)
-            .build();
+        mGoogleApiClient = new GoogleApiClient.Builder( mContext )
+                .addApi(LocationServices.API)
+                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) this)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                .build();
 
-        adapter = new MyAdapter(getApplicationContext(), mEventList, myLocation);
+        adapter = new MyAdapter(mContext.getApplicationContext(), mEventList, myLocation);
 
-        mListView = (ListView) findViewById(R.id.eventList);
+        mListView = (ListView) rootView.findViewById(R.id.eventList);
         mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener(new OnItemClickListener() {
@@ -85,7 +91,6 @@ public class ActivityEventList extends AppCompatActivity implements
                 }
 
                 mActiveViewSwitcher = viewSwitcher;
-                View info_row = view.findViewById(R.id.row_layout);
                 View button_row = view.findViewById(R.id.join_or_back);
                 viewSwitcher.showNext();
                 Button backButton = (Button) button_row.findViewById(R.id.back_button);
@@ -102,7 +107,7 @@ public class ActivityEventList extends AppCompatActivity implements
                     @Override
                     public void onClick(View v) {
                         Log.d("objectID", entry.getObjectId());
-                        Intent i = new Intent(getBaseContext(), ActivityQuestionSentimentList.class);
+                        Intent i = new Intent(mContext, ActivityQuestionSentimentList.class);
                         i.putExtra("objectID", entry.getObjectId());
                         viewSwitcher.showPrevious();
                         mActiveViewSwitcher = null;
@@ -113,16 +118,16 @@ public class ActivityEventList extends AppCompatActivity implements
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getBaseContext(), ActivityEventAdd.class);
+                Intent i = new Intent(mContext, ActivityEventAdd.class);
                 startActivity(i);
             }
         });
 
-
+        return rootView;
     }
 
     private void handleNewLocation() {
@@ -136,6 +141,7 @@ public class ActivityEventList extends AppCompatActivity implements
         Log.d("Longitude", String.format("%.2f", myLocation.getLongitude()));
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
         query.whereWithinMiles("location", userLocation, 5.0);
+        query.whereGreaterThan("endDate", new Date());
         query.addAscendingOrder("startDate");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -180,7 +186,8 @@ public class ActivityEventList extends AppCompatActivity implements
         if (connectionResult.hasResolution()) {
             try {
                 // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+                connectionResult.startResolutionForResult((Activity) mContext, CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
             }
@@ -197,25 +204,18 @@ public class ActivityEventList extends AppCompatActivity implements
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     @Override

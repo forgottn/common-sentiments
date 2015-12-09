@@ -91,7 +91,8 @@
         <EditText
             android:id="@+id/venue_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress|textCapWords|textNoSuggestions" />
 
         <TextView
             android:id="@+id/time"
@@ -105,27 +106,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="7">
-
-            <EditText
-                android:id="@+id/start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="3"/>
+            android:padding="8dp">
 
             <TextView
+                android:id="@+id/start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:layout_weight="1"
-                android:textColor="#000"
-                android:text="---"/>
+                android:text="Tuesday, December 10, 2015"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:onClick="onDateClicked" />
 
-            <EditText
-                android:id="@+id/end_time"
+            <TextView
+                android:id="@+id/start_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:text="4:00 PM"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:onClick="onTimeClicked" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/end_date"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="3"/>
+                android:text="Tuesday, December 10, 2015"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:onClick="onDateClicked"/>
+
+            <TextView
+                android:id="@+id/end_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:text="4:00 PM"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:onClick="onTimeClicked" />
         </LinearLayout>
 
         <TextView
