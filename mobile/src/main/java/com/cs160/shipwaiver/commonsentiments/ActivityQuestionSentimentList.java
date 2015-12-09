@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -175,20 +176,22 @@ public class ActivityQuestionSentimentList extends AppCompatActivity {
 
         final Button voteButton = (Button) layout.findViewById(R.id.emo_vote_button);
         final ParseObject currentSentiment = mSentiments.get(idAsString);
-        final boolean clickedSentiment = currentSentiment.getList("clickedUsers").contains(ParseUser.getCurrentUser());
 
-        if (clickedSentiment) {
+        if (currentSentiment.getList("clickedUsers").contains(ParseUser.getCurrentUser())) {
             voteButton.setText("Unvote");
         }
 
         voteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean clickedSentiment = currentSentiment.getList("clickedUsers").contains(ParseUser.getCurrentUser());
                 if (clickedSentiment) {
                     currentSentiment.increment("upvoteCount", -1);
                     currentSentiment.removeAll("clickedUsers", Collections.singletonList(ParseUser.getCurrentUser()));
                     currentSentiment.saveInBackground();
                     voteButton.setText("Vote");
+                    TextView emoVotes = (TextView) findViewById(R.id.emo_votes);
+                    emoVotes.setText(String.format("%d Votes", mSentiments.get(idAsString).getInt("upvoteCount")));
                 } else {
                     currentSentiment.increment("upvoteCount");
                     currentSentiment.add("clickedUsers", ParseUser.getCurrentUser());

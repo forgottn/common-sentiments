@@ -30,6 +30,7 @@ public class Event {
             sentiment.put("name", sentimentTitles[i]);
             sentiment.put("viewId", sentimentViewIds[i]);
             sentiment.put("upvoteCount", 0);
+            sentiment.put("clickedUsers", new ArrayList<ParseUser>());
             sentiments.add(sentiment);
         }
 
@@ -51,20 +52,8 @@ public class Event {
                 @Override
                 public void done(ParseException e) {
                     if (e == null) {
-                        ParseUser.getCurrentUser().fetchIfNeededInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(ParseObject object, ParseException e) {
-                                if (e == null) {
-                                    List<ParseObject> events = object.getList("events");
-                                    ArrayList<ParseObject> eventArrayList = new ArrayList<>(events);
-                                    eventArrayList.add(event);
-                                    object.put("events", eventArrayList);
-                                    object.saveInBackground(saveCallback);
-                                } else {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+                        ParseUser.getCurrentUser().add("events", event);
+                        ParseUser.getCurrentUser().saveInBackground(saveCallback);
                     } else {
                         e.printStackTrace();
                     }

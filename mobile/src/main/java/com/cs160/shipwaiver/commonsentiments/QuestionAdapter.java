@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,10 +61,7 @@ public class QuestionAdapter extends BaseAdapter {
         text1.setText(question.getString("question"));
         text2.setText(String.format("%d", question.getInt("upvoteCount")));
 
-        final boolean clickedUpvote = question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser());
-        final boolean clickedFlag = question.getList("clickedFlagUsers").contains(ParseUser.getCurrentUser());
-
-        if (clickedUpvote) {
+        if (question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser())) {
             text2.setTextColor(Color.parseColor("#5CBFEA"));
         }
 
@@ -71,8 +69,13 @@ public class QuestionAdapter extends BaseAdapter {
         upvoteArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean clickedUpvote = question.getList("clickedUpvoteUsers").contains(ParseUser.getCurrentUser());
                 if (clickedUpvote) {
-                    // Already upvoted
+                    question.increment("upvoteCount", -1);
+                    question.removeAll("clickedUpvoteUsers", Collections.singletonList(ParseUser.getCurrentUser()));
+                    question.saveInBackground();
+                    text2.setText(String.format("%d", question.getInt("upvoteCount")));
+                    text2.setTextColor(Color.parseColor("#848383"));
                 } else {
                     text2.setTextColor(Color.parseColor("#5CBFEA"));
                     question.increment("upvoteCount");
@@ -84,21 +87,26 @@ public class QuestionAdapter extends BaseAdapter {
         });
 
         final ImageView flag = (ImageView) rowView.findViewById(R.id.flag);
-        if (clickedFlag) {
+        if (question.getList("clickedFlagUsers").contains(ParseUser.getCurrentUser())) {
             flag.setImageDrawable(context.getDrawable(R.drawable.flag_clicked));
         }
 
         flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean clickedFlag = question.getList("clickedFlagUsers").contains(ParseUser.getCurrentUser());
                 if (clickedFlag) {
-                    // Already upvoted
+                    flag.setImageDrawable(context.getDrawable(R.drawable.flag));
+                    question.increment("flagCount");
+                    question.removeAll("clickedFlagUsers", Collections.singletonList(ParseUser.getCurrentUser()));
+                    question.saveInBackground();
                 } else {
                     flag.setImageDrawable(context.getDrawable(R.drawable.flag_clicked));
                     question.increment("flagCount");
                     question.add("clickedFlagUsers", ParseUser.getCurrentUser());
                     if (question.getInt("flagCount") >= 3) {
                         question.deleteInBackground();
+                        notifyDataSetChanged();
                     } else {
                         question.saveInBackground();
                     }

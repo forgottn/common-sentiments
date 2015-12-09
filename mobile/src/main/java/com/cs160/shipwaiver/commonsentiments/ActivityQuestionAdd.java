@@ -10,7 +10,10 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ActivityQuestionAdd extends AppCompatActivity {
@@ -41,14 +44,14 @@ public class ActivityQuestionAdd extends AppCompatActivity {
                         @Override
                         public void done(List<ParseObject> objects, ParseException e) {
                             ParseObject event = objects.get(0);
-                            List<ParseObject> questions = event.getList("questions");
                             ParseObject question = new ParseObject("Question");
                             question.put("question", mQuestionText.getText().toString());
                             question.put("upvoteCount", 1);
                             question.put("flagCount", 0);
+                            question.put("clickedUpvoteUsers", Collections.singletonList(ParseUser.getCurrentUser()));
+                            question.put("clickedFlagUsers", new ArrayList<ParseUser>());
                             question.saveInBackground();
-                            questions.add(question);
-                            event.put("questions", questions);
+                            event.add("questions", question);
                             event.saveInBackground();
                         }
                     });
