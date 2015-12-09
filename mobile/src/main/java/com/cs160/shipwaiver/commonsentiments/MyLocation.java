@@ -1,8 +1,5 @@
 package com.cs160.shipwaiver.commonsentiments;
 
-/**
- * Created by forgottn on 11/19/15.
- */
 public class MyLocation {
     private Double mLatitude;
     private Double mLongitude;

@@ -10,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,11 +18,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-/**
- * Created by forgottn on 12/7/15.
- */
 public class QuestionAdapter extends BaseAdapter {
 
     private ArrayList<ParseObject> questionList;

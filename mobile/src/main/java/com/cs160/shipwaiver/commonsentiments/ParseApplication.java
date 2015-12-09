@@ -10,9 +10,6 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
-/**
- * Created by forgottn on 12/1/15.
- */
 public class ParseApplication extends Application {
 
     @Override

@@ -5,7 +5,6 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;

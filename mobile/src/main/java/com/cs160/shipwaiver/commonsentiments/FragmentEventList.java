@@ -73,8 +73,8 @@ public class FragmentEventList extends Fragment implements
 
         mGoogleApiClient = new GoogleApiClient.Builder( mContext )
                 .addApi(LocationServices.API)
-                .addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) this)
-                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) this)
+                .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
                 .build();
 
         adapter = new MyAdapter(mContext.getApplicationContext(), mEventList, myLocation);
