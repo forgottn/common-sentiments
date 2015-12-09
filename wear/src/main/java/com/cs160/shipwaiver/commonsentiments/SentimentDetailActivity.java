@@ -2,6 +2,7 @@ package com.cs160.shipwaiver.commonsentiments;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.support.wearable.view.CardScrollView;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -36,7 +37,7 @@ public class SentimentDetailActivity extends Activity {
             String name = bun.getString("name");
             int upvoteCount = bun.getInt("upvoteCount");
             JSONArray clickedUsers = new JSONArray(bun.getString("clickedUsers"));
-            int id = getResources().getIdentifier(sentimentIDAsString, "id", getPackageName());
+            int id = getResources().getIdentifier(sentimentIDAsString, "drawable", getPackageName());
             mEmoImageView.setImageResource(id);
             mEmoNameTextView.setText(name);
             mEmoVoteCountTextView.setText(String.format("%d Votes", upvoteCount));

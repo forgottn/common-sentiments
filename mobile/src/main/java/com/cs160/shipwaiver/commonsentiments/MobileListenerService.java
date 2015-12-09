@@ -1,31 +1,25 @@
 package com.cs160.shipwaiver.commonsentiments;
 
-import android.app.Service;
-import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MobileListenerService extends WearableListenerService implements
@@ -47,6 +41,7 @@ public class MobileListenerService extends WearableListenerService implements
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .build();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -57,12 +52,6 @@ public class MobileListenerService extends WearableListenerService implements
     @Override
     public void onConnectionSuspended(int i) {
         Log.i("ConnectionSuspended", "Location services suspended. Please reconnect.");
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startID) {
-        mGoogleApiClient.connect();
-        return START_STICKY;
     }
 
     @Override
@@ -81,20 +70,33 @@ public class MobileListenerService extends WearableListenerService implements
                 final String sentimentIDAsString = objectIDs.getString("sentimentIDAsString");
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("Event");
                 query.whereEqualTo("objectId", parseObjectID);
-                query.whereEqualTo("sentiments.viewId", sentimentIDAsString);
+                query.include("sentiments");
                 query.include("sentiments.clickedUsers");
                 query.getFirstInBackground(new GetCallback<ParseObject>() {
                     @Override
                     public void done(ParseObject object, ParseException e) {
-                        try {
-                            JSONObject sentiment = new JSONObject();
-                            sentiment.put("name", object.getString("name"));
-                            sentiment.put("upvoteCount", object.getInt("upvoteCount"));
-                            sentiment.put("clickedUsers", object.getList("clickedUsers"));
-                            sentiment.put("sentimentIDAsString", sentimentIDAsString);
-                            sendMessage(DISPLAY_SENTIMENT, sentiment.toString());
-                        } catch (JSONException err) {
-                            err.printStackTrace();
+                        if (e == null) {
+                            try {
+                                List<ParseObject> sentimentsList = object.getList("sentiments");
+                                ArrayList<ParseObject> sentiments = new ArrayList<ParseObject>(sentimentsList);
+                                for (ParseObject sentimentObject : sentiments) {
+                                    if (sentimentObject.getString("viewId").equals(sentimentIDAsString)) {
+                                        Log.d("MobileListener", "Got here");
+                                        JSONObject sentiment = new JSONObject();
+                                        sentiment.put("name", sentimentObject.getString("name"));
+                                        sentiment.put("upvoteCount", sentimentObject.getInt("upvoteCount"));
+                                        JSONArray clickedUsersArray = sentimentObject.getJSONArray("clickedUsers");
+                                        sentiment.put("clickedUsers", clickedUsersArray);
+                                        sentiment.put("sentimentIDAsString", sentimentIDAsString);
+                                        sendMessage(DISPLAY_SENTIMENT, sentiment.toString());
+                                        break;
+                                    }
+                                }
+                            } catch (JSONException err) {
+                                err.printStackTrace();
+                            }
+                        } else {
+                            e.printStackTrace();
                         }
                     }
                 });

@@ -2,6 +2,7 @@ package com.cs160.shipwaiver.commonsentiments;
 
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
@@ -14,7 +15,6 @@ public class WatchListenerService extends WearableListenerService {
     private static final String JOIN_EVENT = "/com.cs160.shipwaiver.commonsentiments.join_event";
     private static final String DISPLAY_SENTIMENT = "/com.cs160.shipwaiver.commonsentiments.display_sentiment";
 
-
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         if (messageEvent.getPath().equalsIgnoreCase(JOIN_EVENT)) {
@@ -26,6 +26,7 @@ public class WatchListenerService extends WearableListenerService {
             startActivity(i);
         } else if (messageEvent.getPath().equalsIgnoreCase(DISPLAY_SENTIMENT)) {
             try {
+                Log.d("WatchListender", "DISPLAY SENTIMENT");
                 JSONObject sentiment = new JSONObject(new String(messageEvent.getData()));
 
                 Intent i = new Intent(this, SentimentDetailActivity.class);

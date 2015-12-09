@@ -44,8 +44,11 @@
 
         <service
             android:name=".MobileListenerService"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:label=".MobileListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
