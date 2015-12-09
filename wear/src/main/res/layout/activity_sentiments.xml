@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.biovamp.widget.CircleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sentiment_list"
+    android:layout_gravity="center_horizontal|center_vertical"
+    app:innerRadius="75dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <ImageView
+        android:id="@+id/emo_sad"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_sad"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_sleepy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_sleepy"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_angry"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_angry"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_excited"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_excited"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_thumbsu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_thumbsu"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_thumbsd"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_thumbsd"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_toofast"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_toofast"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_slow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_slow"
+        android:onClick="onSentimentClicked"/>
+
+    <ImageView
+        android:id="@+id/emo_confused"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/emo_confused"
+        android:onClick="onSentimentClicked"/>
+</ru.biovamp.widget.CircleLayout>
+

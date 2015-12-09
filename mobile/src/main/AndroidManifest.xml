@@ -41,6 +41,11 @@
             android:name=".ActivityQuestionAdd"
             android:label="@string/title_activity_add_question"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".MobileListenerService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

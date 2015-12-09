@@ -24,6 +24,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.Wearable;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseGeoPoint;
@@ -58,6 +62,8 @@ public class FragmentEventList extends Fragment implements
     private ViewSwitcher mActiveViewSwitcher;
 
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private static final String JOIN_EVENT = "/com.cs160.shipwaiver.commonsentiments.join_event";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +78,7 @@ public class FragmentEventList extends Fragment implements
                 .setFastestInterval(10000); // 1 second, in milliseconds
 
         mGoogleApiClient = new GoogleApiClient.Builder( mContext )
+                .addApi(Wearable.API)
                 .addApi(LocationServices.API)
                 .addOnConnectionFailedListener(this)
                 .addConnectionCallbacks(this)
@@ -125,6 +132,7 @@ public class FragmentEventList extends Fragment implements
                                             i.putExtra("objectID", entry.getObjectId());
                                             viewSwitcher.showPrevious();
                                             mActiveViewSwitcher = null;
+                                            sendMessage(JOIN_EVENT, entry.getObjectId());
                                             startActivity(i);
 
                                         } else {
@@ -231,6 +239,20 @@ public class FragmentEventList extends Fragment implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+    }
+
+    private void sendMessage( final String path, final String text ) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("FragmentEventList", "c'monnnn");
+                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes( mGoogleApiClient ).await();
+                for (Node node : nodes.getNodes() ) {
+                    MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(
+                            mGoogleApiClient, node.getId(), path, text.getBytes() ).await();
+                }
+            }
+        }).start();
     }
 
     @Override

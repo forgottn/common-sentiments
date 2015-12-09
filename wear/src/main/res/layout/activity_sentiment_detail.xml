@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#fff"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <android.support.wearable.view.CardScrollView
+        android:id="@+id/card_scroll_view"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_box="bottom">
+
+        <android.support.wearable.view.CardFrame
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/watch_emo_image"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/emo_angry"/>
+                    <LinearLayout
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
+                        <TextView
+                            android:id="@+id/watch_emo_name"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:text="Confused"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="20sp"/>
+                        <TextView
+                            android:id="@+id/watch_emo_vote_count"
+                            android:fontFamily="sans-serif-light"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:text="14 Votes"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vote"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Back"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.wearable.view.CardFrame>
+    </android.support.wearable.view.CardScrollView>
+</android.support.wearable.view.BoxInsetLayout>

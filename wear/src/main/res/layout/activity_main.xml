@@ -22,7 +22,7 @@
     <TextView android:id="@+id/wait_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please start the application from   your phone"
+        android:text="Please start the application from your phone"
         android:textColor="#767777"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
